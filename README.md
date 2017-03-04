@@ -21,7 +21,7 @@ The following **optional** features are implemented:
 
 The following **additional** features are implemented:
 
-- [ ] List anything else that you can get done to improve the app functionality!
+- [x] Modified SSRadioButtonsController from github to use in SettingsViewController as a delegatev(https://github.com/shamasshahid/SSRadioButtonsController)
 
 ## Video Walkthrough 
 
@@ -33,7 +33,7 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+Differentiating between swift 2 and swift 3 syntax
 
 ## License
 

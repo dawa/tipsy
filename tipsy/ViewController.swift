@@ -67,7 +67,7 @@ class ViewController: UIViewController {
 
         let defaults = NSUserDefaults.standardUserDefaults()
         defaults.setObject(billString, forKey: "last_bill_value")
-        defaults.setObject(NSDate(), forKey: "last_bill_timesptamp")
+        defaults.setObject(NSDate(), forKey: "last_bill_timestamp")
         defaults.synchronize()
 
         animateTotal()
