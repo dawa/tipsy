@@ -31,7 +31,7 @@ class ViewController: UIViewController {
         // Use cog image as setting controller toggle button
         settingsButton?.title = NSString(string: "\u{2699}") as String
         if let font = UIFont(name: "Helvetica", size: 18.0) {
-            settingsButton?.setTitleTextAttributes([NSFontAttributeName: font], forState: UIControlState.Normal)
+            settingsButton?.setTitleTextAttributes([NSFontAttributeName: font], for: UIControlState())
         }
     }
 
@@ -40,34 +40,34 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        let defaults = NSUserDefaults.standardUserDefaults()
+        let defaults = UserDefaults.standard
 
-        tipControl.selectedSegmentIndex = defaults.integerForKey("default_tip_value")
+        tipControl.selectedSegmentIndex = defaults.integer(forKey: "default_tip_value")
     }
     
-    @IBAction func onTap(sender: AnyObject) {
+    @IBAction func onTap(_ sender: AnyObject) {
         view.endEditing(true)
     }
 
-    @IBAction func calculateTip(sender: AnyObject) {
+    @IBAction func calculateTip(_ sender: AnyObject) {
         let billString = billField.text! as NSString
         let tipPercentages = [0.15, 0.2, 0.25]
         let bill = Double(billString as String) ?? 0
         let tip = bill * tipPercentages[tipControl.selectedSegmentIndex]
         let total = bill + tip
 
-        let formatter = NSNumberFormatter()
-        formatter.numberStyle = .CurrencyStyle
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
 
-        tipLabel.text = formatter.stringFromNumber(tip)!
-        totalLabel.text = formatter.stringFromNumber(total)!
+        tipLabel.text = formatter.string(from: tip as NSNumber)!
+        totalLabel.text = formatter.string(from: total as NSNumber)!
 
-        let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.setObject(billString, forKey: "last_bill_value")
-        defaults.setObject(NSDate(), forKey: "last_bill_timestamp")
+        let defaults = UserDefaults.standard
+        defaults.set(billString, forKey: "last_bill_value")
+        defaults.set(Date(), forKey: "last_bill_timestamp")
         defaults.synchronize()
 
         animateTotal()
@@ -75,23 +75,23 @@ class ViewController: UIViewController {
     
     func animateTotal() {
         self.totalLabel.alpha = 0
-        UIView.animateWithDuration(0.5,
+        UIView.animate(withDuration: 0.5,
                                    delay: 0.0,
-                                   options: UIViewAnimationOptions.CurveEaseIn,
+                                   options: UIViewAnimationOptions.curveEaseIn,
                                    animations: { self.totalLabel.alpha = 1 },
                                    completion: nil )
     }
 
     func getLastBill() -> String? {
-        let now = NSDate()
-        let defaults = NSUserDefaults.standardUserDefaults()
-        let lastBillTimestamp = defaults.objectForKey("last_bill_timestamp") as! NSDate?
-        let billResetAfter = NSTimeInterval(10 * 60)
+        let now = Date()
+        let defaults = UserDefaults.standard
+        let lastBillTimestamp = defaults.object(forKey: "last_bill_timestamp") as! Date?
+        let billResetAfter = TimeInterval(10 * 60)
         
-        if (lastBillTimestamp == nil || now.timeIntervalSinceDate(lastBillTimestamp!) > billResetAfter) {
+        if (lastBillTimestamp == nil || now.timeIntervalSince(lastBillTimestamp!) > billResetAfter) {
             return nil
         } else {
-            return defaults.objectForKey("last_bill_value") as! String?
+            return defaults.object(forKey: "last_bill_value") as! String?
         }
     }
 }

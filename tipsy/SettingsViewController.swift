@@ -22,8 +22,8 @@ class SettingsViewController: UIViewController, SSRadioButtonControllerDelegate 
         // Do any additional setup after loading the view.
         defaultButtons = [fifteenPerCent, twentyPerCent, twentyFivePerCent]
         
-        let defaults = NSUserDefaults.standardUserDefaults()
-        let integerTipValue = defaults.integerForKey("default_tip_value")
+        let defaults = UserDefaults.standard
+        let integerTipValue = defaults.integer(forKey: "default_tip_value")
         
         radioButtonController = SSRadioButtonsController(buttons: fifteenPerCent, twentyPerCent, twentyFivePerCent)
         radioButtonController!.delegate = self
@@ -35,12 +35,12 @@ class SettingsViewController: UIViewController, SSRadioButtonControllerDelegate 
         // Dispose of any resources that can be recreated.
     }
     
-    func didSelectButton(aButton: UIButton?) {
+    func didSelectButton(_ aButton: UIButton?) {
         let currentButton = radioButtonController!.selectedButton()
-        let integerTipIndex = defaultButtons!.indexOf{$0 === currentButton} ?? 0
-        let defaults = NSUserDefaults.standardUserDefaults()
+        let integerTipIndex = defaultButtons!.index{$0 === currentButton} ?? 0
+        let defaults = UserDefaults.standard
 
-        defaults.setInteger(integerTipIndex, forKey: "default_tip_value")
+        defaults.set(integerTipIndex, forKey: "default_tip_value")
         defaults.synchronize()
     }
 
